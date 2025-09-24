@@ -1,4 +1,4 @@
-from requests import request
+import requests
 class PokemonConfig:
     def __init__(self):
         self.url = 'https://pokeapi.co/api/v2/pokemon/'
@@ -23,8 +23,8 @@ class PokemonAPI:
         try:
             if not name:
                 return None
-            req = request('GET', self.config.url + name)
-            return req.json()
+            res = requests.get(self.config.url + name)
+            return res.json()
         
         except Exception as e:
             print(f'Error in request API Pokemon:{self.config.url + name}. Erro:{e}')
