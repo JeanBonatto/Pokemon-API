@@ -1,28 +1,54 @@
+import json
 import requests
-from fastapi import HTTPException
+from fastapi import HTTPException,status
 from src.core.external.api_pokemon import PokemonAPI
 from src.processor.validator import Validator
+from src.processor.data_processor import DataProcessorString
 
 class PokemonService:
     def __init__(self, pokemon_api: PokemonAPI = None, validator: Validator = None):
         self.pokemon_api = pokemon_api or PokemonAPI()
         self.validator = validator or Validator()
+        self.data_processor = DataProcessorString()
         pass
 
-    def get_query_pokemon(self, identifier: str | int, field: str = "name") -> dict | HTTPException:
+    def get_query_pokemon(self, identifier: str | int, field: str = None) -> dict | HTTPException:
         '''
         Realiza a requisição para API, realizna a validação dos campos e retorna o resultado
         '''
         
         try:
             # Verifica se os Campos são validos
-            is_valido = self.validator.is_validate_identifier_field(identifier, field)
-            if is_valido is not True:
-                return is_valido
-                
-            response = self.pokemon_api.get_id_name()
-            response.raise_for_status()
-            return response.json()
+            identifier,field = self.validator.is_validate_identifier_field(identifier, field)
             
-        except requests.exceptions.RequestException:
-            raise HTTPException(status_code=404, detail="Pokemon não encontrado")
+            #Faz o tratamento das strings
+            identifier = self.data_processor.process_string(identifier)
+            if field:
+                field = self.data_processor.process_string(field)
+            # Busca Pokemon
+            pokemon_data = self.pokemon_api.get_id_name(identifier)
+            
+            if not pokemon_data:
+                raise HTTPException(
+                    status_code=pokemon_data.status_code,
+                    detail=pokemon_data.text
+                )
+            
+            # Filtra por característica se necessário
+            if field in self.validator.config.fields_opcional:
+                filtered_data = {
+                    "name": pokemon_data["name"],
+                    "id": pokemon_data["id"],
+                    field: pokemon_data[field]
+                }
+                return json.dumps(filtered_data)
+
+            return json.dumps(pokemon_data)
+        
+        except HTTPException as http_exc:
+            raise http_exc
+        except Exception as e:
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=str(e)
+            )

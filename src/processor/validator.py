@@ -1,9 +1,10 @@
+from logging import Logger
 from fastapi import HTTPException, status
 class ValidatorConfig:
     def __init__(self):
         self.fields_identificador = ["id", "name"]
         self.fields_opcional = ["weight", "height"]
-
+        self.fields = self.fields_identificador + self.fields_opcional
 
 class Validator:
     def __init__(self, config: ValidatorConfig = None):
@@ -28,11 +29,16 @@ class Validator:
                 identifier = int(identifier)
             #Verifica o campo field, se possui valor valido
             if field:
-                field = field.lower().strip()
-                if field not in self.config.fields and field not in self.config.fields_opcional:
+                field = field.strip()
+                if field not in self.config.fields:
                     return HTTPException(status_code=status.HTTP_400_BAD_REQUEST, 
                                         detail=f"Campo inválido, os campos válidos são: {', '.join(self.config.fields)}")
             return identifier, field
+        except HTTPException:
+            raise
         except Exception as e:
-            return HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, 
-                                 detail=str(e))
+            Logger.error(f"Erro em realizar a validação dos campos: {str(e)}")
+            raise HTTPException(
+                status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                detail=f"Erro na validação: {str(e)}"
+            )
