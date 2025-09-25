@@ -1,5 +1,6 @@
 import requests
 from loguru import logger
+from typing import Union
 
 class PokemonConfig:
     def __init__(self):
@@ -10,7 +11,7 @@ class PokemonAPI:
         self.config = config or PokemonConfig()
         self.STATUS_OK = [200, 201, 202]
     
-    def get_id_name(self, identifier: str | int = None) -> dict:
+    def get_id_name(self, identifier: Union[str, int] = None) -> dict:
         '''
         Esse método faz a requisição para a API do Pokemon e retorna o JSON com as informações do Pokemon.
         Segue o link da API: https://pokeapi.co/docs/v2#pokemon
