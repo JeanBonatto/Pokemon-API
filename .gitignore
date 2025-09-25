@@ -1,4 +1,42 @@
-venv
+# Docker
+.docker/
+docker-compose.override.yml
+*.env
 .env
-.vscode/
+
+# Docker volumes
+data/
+postgres-data/
+mysql-data/
+mongodb-data/
+
+# Docker logs
+*.log
+logs/
+
+# Cache de builds do Docker
+.docker-cache/
+
+# Arquivos temporários do Docker
+docker-compose.override.yml
+docker-compose.*.yml
+!docker-compose.yml
+
+# Python (relacionados ao ambiente Docker)
 __pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+venv/
+.env/
+
+# IDE e Editores (podem interferir com Docker)
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
