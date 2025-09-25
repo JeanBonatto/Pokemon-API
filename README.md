@@ -10,6 +10,7 @@ Esta API permite consultar informações detalhadas sobre Pokémons utilizando a
 
 - Python 3.9
 - FastAPI
+- Pytest
 - Docker
 - Uvicorn
 - Requests
