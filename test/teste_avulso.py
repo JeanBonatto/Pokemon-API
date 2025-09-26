@@ -10,7 +10,7 @@ pokemon_service = PokemonService()
 
 def test_avulso():
     """Test case: query_pokemon(132, field="id")"""
-    identifier = "ditto"
+    identifier = "dito"
 
     request = pokemon_service.get_query_pokemon(identifier)
     assert request is not None

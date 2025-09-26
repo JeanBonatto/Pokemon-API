@@ -49,6 +49,7 @@ class PokemonService:
             return json.dumps(pokemon_data)
         
         except HTTPException as http_exc:
+            logger.error(f"HTTPException ao consultar Pokemon: {http_exc.detail}")
             raise http_exc
         except Exception as e:
             logger.error(f"Erro ao consultar Pokemon: {e}")
