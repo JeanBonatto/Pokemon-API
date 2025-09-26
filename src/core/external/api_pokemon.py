@@ -22,6 +22,7 @@ class PokemonAPI:
             dict: Retorna um dicionário com as informações do Pokemon.
         '''
         try:
+            logger.info(f"Requisição para API do Pokemon com identificador: {identifier}")
             if not identifier:
                 raise ValueError("Nome do Pokemon não pode ser vazio")
             url_full = self.config.url + str(identifier).lower().strip()
@@ -32,5 +33,5 @@ class PokemonAPI:
             return res.json()
         
         except Exception as e:
-            print(f'Error in request API Pokemon:{url_full}. Erro:{e}')
+            logger.error(f"Erro ao fazer a requisição para API do Pokemon: {str(e)}")
             return None

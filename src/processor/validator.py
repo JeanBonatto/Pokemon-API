@@ -1,4 +1,4 @@
-from logging import Logger
+from loguru import logger
 from fastapi import HTTPException, status
 class ValidatorConfig:
     def __init__(self):
@@ -19,10 +19,13 @@ class Validator:
         '''
         
         try:
+            logger.info(f"Validando identificador: {identifier}, Campo: {field}")
             #Verifica se o identinficador é um FLoat e retorna falso
             if isinstance(identifier, float):
+                msg = "Identificador inválido, o mesmo não pode ser um número decimal."
+                logger.error(msg)
                 return HTTPException(status_code=status.HTTP_400_BAD_REQUEST, 
-                                    detail="Identificador inválido, o mesmo não pode ser um número decimal.")
+                                    detail=msg)
             
             # Verifica se o identificador é um número em formato string e converte para int
             if isinstance(identifier, str) and identifier.isdigit():
@@ -33,11 +36,12 @@ class Validator:
                 if field not in self.config.fields:
                     return HTTPException(status_code=status.HTTP_400_BAD_REQUEST, 
                                         detail=f"Campo inválido, os campos válidos são: {', '.join(self.config.fields)}")
+            logger.info(f"Identificador e campo validados com sucesso: {identifier}, Campo: {field}")
             return identifier, field
         except HTTPException:
             raise
         except Exception as e:
-            Logger.error(f"Erro em realizar a validação dos campos: {str(e)}")
+            logger.error(f"Erro em realizar a validação dos campos: {str(e)}")
             raise HTTPException(
                 status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 detail=f"Erro na validação: {str(e)}"
