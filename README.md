@@ -4,7 +4,7 @@ Uma API RESTful para consultar informações sobre Pokémons utilizando FastAPI 
 
 ## 📋 Descrição
 
-Esta API permite consultar informações detalhadas sobre Pokémons utilizando a PokéAPI como fonte de dados. Construída com FastAPI, oferece uma interface rápida e eficiente para buscar dados como nome, peso, altura, habilidades e muito mais.
+Esta API permite consultar informações detalhadas sobre Pokemons utilizando a PokeAPI como fonte de dados. Construída com FastAPI, oferece uma interface rápida e eficiente para buscar dados como nome, peso, altura, habilidades e muito mais.
 
 ## 🚀 Tecnologias Utilizadas
 
@@ -17,7 +17,7 @@ Esta API permite consultar informações detalhadas sobre Pokémons utilizando a
 
 ## 📦 Pré-requisitos
 
-- Python 3.9+
+- Python 3.10+
 - Docker
 - Docker Compose (opcional)
 
@@ -115,9 +115,6 @@ Pokemon-API/
 └── docker-compose.yml
 ```
 
-## 📄 Licença
-
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ## 👥 Contribuição
 
